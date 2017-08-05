@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>时光匆匆</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link href="../static/css/addwords.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+	<link rel="shortcut icon" type="image/x-icon" href="../static/images/gravatar.jpg"> 
+    <script src="../static/js/jquery-3.2.1.js"></script>
+	<link href="../static/css/sign.css" rel="stylesheet">
+</head>
+<body  style="background-image: url(../static/images/back2.jpg);background-repeat:no-repeat;background-attachment: fixed;">
+   <script type="text/javascript" color="0,0,255" opacity='1' zIndex="-2" count="150" src="http://cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+ <div class="container">
+    <div class="header">
+        <nav>
+        <ul class="nav nav-pills pull-right">
+		<li role="presentation"><a href="/userHome">浏览所有吐槽</a></li>
+	    <li role="presentation" class="active"><a href="#">我要吐槽</a></li>
+        <li role="presentation" ><a href="/logout">登出</a></li>
+        </ul>
+        </nav>
+        <h3 class="text-muted">吐槽板</h3>
+    </div>
+
+		<form role="form" method="post" action="/addWords">
+<div class="form-group">
+	<label for="txtPost">内容</label>                 
+    <textarea class="form-control" id="txtPost"  name="inputDescription" required></textarea>
+</div>
+<div class="form-group">
+    <p class="text-center">
+    <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit" value="发布" />
+  	</p>
+</div>
+</form>
+      <div id="footer">
+            <div>
+                &copy; FlyingStudio-<a href="http://flywinky.top">Bayi</a> 2017
+            </div>
+        </div>
+
+    </div>
+  </body>
+</html>
+
