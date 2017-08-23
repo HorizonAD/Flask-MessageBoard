@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}吐槽 - Login{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Login</h1>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+    <br>
+    </a>
+    <p><a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=3u3s5uvm5ufv6Z6vr-C9sbM">忘记密码</p>
+    <p><a href="{{ url_for('auth.register') }}">注册新账号</a></p>
+</div>
+{% endblock %}
