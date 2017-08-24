@@ -1,5 +1,5 @@
 # MessageBoard
-[吐点槽吧](http://cumt.studio/)
+演示：(不久可能会失效)[吐点槽吧](http://cumt.studio/)
 
 项目结构
 ```
