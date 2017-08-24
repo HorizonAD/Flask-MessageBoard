@@ -1,4 +1,8 @@
 # MessageBoard
+[吐点槽吧](http://cumt.studio/)
+
+项目结构
+```
 |- app
 	|- auth 用户模块
 		|- __init__.py
@@ -36,6 +40,8 @@
 	|- models.py 数据库模型	
 |- config.py 配置文件
 |- manage.py run文件
+```
+
 
 后端考核任务
 
