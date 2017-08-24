@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}吐槽 - {{ user.username }}{% endblock %}
+{% block title %}吐槽{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
     {% if user.avatar is none %}
-    <img class="img-rounded profile-thumbnail" width="160" height="160" src="http://on2mh1s1f.bkt.clouddn.com/defaulted.png">
+    <img class="img-rounded profile-thumbnail" width="180" height="180" src="http://on2mh1s1f.bkt.clouddn.com/defaulted.png">
     {% else %}
-    <img class="img-rounded profile-thumbnail" width="160" height="160" src="app{{ user.avatar }}">
+    <img class="img-rounded profile-thumbnail" width="180" height="180" src="{{ url_for('main.get_file',filename=user.avatar) }}">
     {% endif %}
     <div class="profile-header">
         <h2>{{ user.username }}</h2>

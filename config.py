@@ -13,7 +13,7 @@ class Config:
     FLASKY_COMMENTS_PER_PAGE = 30
     FLASKY_SLOW_DB_QUERY_TIME=0.5
     #上传图片配置
-    UPLOAD_FOLDER= 'app/upload/avatar'
+    UPLOAD_FOLDER= os.getcwd()+'/app/upload/avatar'
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024 #文件最大限制16M,仅需配置
     ALLOWED_EXTENSIONS = set(['bmp','svg','png','jpg','jpeg','gif'])
 

@@ -1,6 +1,6 @@
 import os,hashlib
 from werkzeug.utils import secure_filename
-from flask import render_template, redirect, url_for, abort, flash, request,current_app, make_response
+from flask import render_template, redirect, url_for, abort, flash, request,current_app, make_response,send_from_directory
 from flask_login import login_required, current_user
 from flask_sqlalchemy import get_debug_queries
 from . import main
@@ -8,7 +8,6 @@ from datetime import datetime
 from .forms import EditProfileForm, CommentForm,PostForm,UploadForm
 from .. import db
 from ..models import User, Post, Comment
-
 
 @main.after_app_request
 def after_request(response):
@@ -96,7 +95,7 @@ def newpost():
         post=Post(body = form.body.data,
             author=current_user._get_current_object())
         db.session.add(post)
-        flash('POST已发布')
+        flash('吐槽成功')
         return redirect(url_for('.user',username=current_user.username))
     return render_template('edit_post.html', form=form)
 
@@ -111,7 +110,7 @@ def edit(id):
     if form.validate_on_submit():
         post.body = form.body.data
         db.session.add(post)
-        flash('POST已更新')
+        flash('槽点已更新')
         return redirect(url_for('.post', id=post.id))
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
@@ -139,15 +138,18 @@ def delete_post(id):
     else:
         username=post.author.username
         db.session.delete(post)
-        flash('评论已删除')
+        flash('槽点已删除')
         return redirect(url_for('.user',username=username))        
 
 @main.route('/all')
 @login_required
 def show_all():
     resp = make_response(redirect(url_for('.index')))
-    resp.set_cookie('show_followed', '', max_age=30*24*60*60)
     return resp
+
+@main.route('/avatar/<filename>')
+def get_file(filename):
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'],filename)    
 
 @main.route('/upload_file',methods = ['GET','POST'])
 @login_required
@@ -164,10 +166,15 @@ def upload_file():
             #重命名,format字符串格式化
             filename = hashlib.md5('{0}_{1}'.format(filename,nowtime).encode("gb2312")).hexdigest()+"."+filename.rsplit('.',1)[1]
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'],filename))
-            current_user.avatar='/upload/avatar/'+filename
-            flash('头像已更改')  
+            if current_user.avatar:
+                try:
+                    os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'],current_user.avatar))
+                except OSError:
+                    return {"error": u'文件不存在'}
+            current_user.avatar=filename
+            flash('头像已更改')
             return redirect(url_for('.user', username=current_user.username))
         else: #似乎多余，但可以验证直接post
             flash('未选择文件')
             return redirect(url_for('.upload_file'))
-    return render_template('upload_file.html', form=form)
+    return render_template('upload_file.html', form=form)  

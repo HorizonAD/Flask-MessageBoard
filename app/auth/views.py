@@ -35,6 +35,7 @@ def register():
                     about_me=form.about_me.data)
         db.session.add(user)
         db.session.commit()
+        flash('注册成功')
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
 
