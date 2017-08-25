@@ -5,9 +5,9 @@ from flask_login import login_required, current_user
 from flask_sqlalchemy import get_debug_queries
 from . import main
 from datetime import datetime
-from .forms import EditProfileForm, CommentForm,PostForm,UploadForm
+from .forms import EditProfileForm, CommentForm,PostForm,UploadForm,AnonymousCommentForm
 from .. import db
-from ..models import User, Post, Comment
+from ..models import User, Post, Comment,Follow
 
 @main.after_app_request
 def after_request(response):
@@ -22,11 +22,15 @@ def after_request(response):
 @main.route('/', methods=['GET', 'POST'])
 def index():
     form = PostForm()
-    if current_user._get_current_object() and form.validate_on_submit():
-        post = Post(body=form.body.data,
-                    author=current_user._get_current_object())
-        db.session.add(post)
+    if current_user.is_anonymous and form.validate_on_submit():
+        flash('游客不能提交哦')
         return redirect(url_for('.index'))
+    if current_user._get_current_object() and form.validate_on_submit():
+            post = Post(body=form.body.data,
+                        author=current_user._get_current_object())
+            db.session.add(post)
+            flash('槽点已发布')
+            return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
     query = Post.query
     pagination = query.order_by(Post.timestamp.desc()).paginate(
@@ -65,17 +69,48 @@ def edit_profile():
     return render_template('edit_profile.html', form=form)
 
 @main.route('/post/<int:id>', methods=['GET', 'POST'])
-@login_required
 def post(id):
     post = Post.query.get_or_404(id)
-    form = CommentForm()
-    if form.validate_on_submit() and current_user:
-        comment = Comment(body=form.body.data,
-                          post=post,
-                          author=current_user._get_current_object())
-        db.session.add(comment)
-        flash('评论已发布')
-        return redirect(url_for('.post', id=post.id, page=-1))
+    if current_user.is_anonymous:
+        form=AnonymousCommentForm()
+        if form.validate_on_submit():
+            comment = Comment(body=form.body.data,
+                              post=post,
+                              anonymoususer=form.name.data)
+            db.session.add(comment)
+            followed_id = int(form.follow.data)
+            if followed_id != -1:
+                followed = Comment.query.get_or_404(followed_id)
+                f = Follow(follower=comment, followed=followed)
+                comment.comment_type = 'reply'
+                if followed.author is None:
+                    comment.reply_to = followed.anonymoususer
+                else:
+                    comment.reply_to = followed.author.username
+                db.session.add(f)
+                db.session.add(comment)
+            flash('评论已发布')
+            return redirect(url_for('.post', id=post.id, page=-1))
+    else:
+        form = CommentForm()
+        if form.validate_on_submit():
+            comment = Comment(body=form.body.data,
+                              post=post,
+                              author=current_user._get_current_object())
+            db.session.add(comment)
+            followed_id = int(form.follow.data)
+            if followed_id != -1:
+                followed = Comment.query.get_or_404(followed_id)
+                f = Follow(follower=comment, followed=followed)
+                comment.comment_type = 'reply'
+                if followed.author is None:
+                    comment.reply_to = followed.anonymoususer
+                else:
+                    comment.reply_to = followed.author.username
+                db.session.add(f)
+                db.session.add(comment)
+            flash('评论已发布')
+            return redirect(url_for('.post', id=post.id, page=-1))
     page = request.args.get('page', 1, type=int)
     if page == -1:
         page = (post.comments.count() - 1) // \
@@ -85,19 +120,7 @@ def post(id):
         error_out=False)
     comments = pagination.items
     return render_template('post.html', posts=[post], form=form,
-                           comments=comments, pagination=pagination)
-
-@main.route('/newpost', methods=['GET', 'POST'])
-@login_required
-def newpost():
-    form = PostForm()
-    if form.validate_on_submit():
-        post=Post(body = form.body.data,
-            author=current_user._get_current_object())
-        db.session.add(post)
-        flash('吐槽成功')
-        return redirect(url_for('.user',username=current_user.username))
-    return render_template('edit_post.html', form=form)
+                           comments=comments,id=post.id, pagination=pagination)
 
 @main.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required

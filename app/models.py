@@ -49,46 +49,6 @@ class User(db.Model, UserMixin):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def reset_password(self, token, new_password):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)
-        except:
-            return False
-        if data.get('reset') != self.id:
-            return False
-        self.password = new_password
-        db.session.add(self)
-        return True
-
-    def change_username(self, token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)
-        except:
-            return False
-        if data.get('change_username') != self.id:
-            return False
-        new_username = data.get('new_username')
-        if new_username is None:
-            return False
-        if self.query.filter_by(username=new_username).first() is not None:
-            return False
-        self.username = new_username
-        self.avatar_hash = hashlib.md5(
-            self.username.encode('utf-8')).hexdigest()
-        db.session.add(self)
-        return True
-
-    def to_json(self):
-        json_user = {
-            'url': url_for('api.get_user', id=self.id, _external=True),
-            'username': self.username,
-            'posts': url_for('api.get_user_posts', id=self.id, _external=True),
-            'post_count': self.posts.count()
-        }
-        return json_user
-
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -136,39 +96,71 @@ class Post(db.Model):
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True))
 
-    def to_json(self):
-        json_post = {
-            'url': url_for('api.get_post', id=self.id, _external=True),
-            'body': self.body,
-            'body_html': self.body_html,
-            'timestamp': self.timestamp,
-            'author': url_for('api.get_user', id=self.author_id,
-                              _external=True),
-            'comments': url_for('api.get_post_comments', id=self.id,
-                                _external=True),
-            'comment_count': self.comments.count()
-        }
-        return json_post
-
-    @staticmethod
-    def from_json(json_post):
-        body = json_post.get('body')
-        if body is None or body == '':
-            raise ValidationError('请先填写内容！')
-        return Post(body=body)
-
 
 db.event.listen(Post.body, 'set', Post.on_changed_body)
 
+class Follow(db.Model):
+    __tablename__ = 'follows'
+    follower_id = db.Column(db.Integer, db.ForeignKey('comments.id'),
+                           primary_key=True)
+    followed_id = db.Column(db.Integer, db.ForeignKey('comments.id'),
+                         primary_key=True)
 
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
+    anonymoususer=db.Column(db.String(64))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    comment_type = db.Column(db.String(64), default='comment')
+    reply_to = db.Column(db.String(128), default='notReply')
+    followed = db.relationship('Follow',
+                               foreign_keys=[Follow.follower_id],
+                               backref=db.backref('follower', lazy='joined'),
+                               lazy='dynamic',
+                               cascade='all, delete-orphan')
+    followers = db.relationship('Follow',
+                               foreign_keys=[Follow.followed_id],
+                               backref=db.backref('followed', lazy='joined'),
+                               lazy='dynamic',
+                               cascade='all, delete-orphan')
+    @staticmethod
+    def generate_fake(count=100):
+        from random import seed, randint
+        import forgery_py
+
+        seed()
+        post_count = Post.query.count()
+        for i in range(count):
+            a = Post.query.offset(randint(0, post_count - 1)).first()
+            c = Comment(body=forgery_py.lorem_ipsum.sentences(randint(3, 5)),
+                        timestamp=forgery_py.date.date(True),
+                        post=a)
+            db.session.add(c)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+    @staticmethod
+    def generate_fake_replies(count=100):
+        from random import seed, randint
+        import forgery_py
+
+        seed()
+        comment_count = Comment.query.count()
+        for i in range(count):
+            followed = Comment.query.offset(randint(0, comment_count - 1)).first()
+            c = Comment(body=forgery_py.lorem_ipsum.sentences(randint(3, 5)),
+                        timestamp=forgery_py.date.date(True),
+                        post=followed.post, comment_type='reply',
+                        reply_to=followed.author)
+            f = Follow(follower=c, followed=followed)
+            db.session.add(f)
+            db.session.commit()
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
@@ -178,24 +170,15 @@ class Comment(db.Model):
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True))
 
-    def to_json(self):
-        json_comment = {
-            'url': url_for('api.get_comment', id=self.id, _external=True),
-            'post': url_for('api.get_post', id=self.post_id, _external=True),
-            'body': self.body,
-            'body_html': self.body_html,
-            'timestamp': self.timestamp,
-            'author': url_for('api.get_user', id=self.author_id,
-                              _external=True),
-        }
-        return json_comment
+    def is_reply(self):
+        if self.followed.count() == 0:
+            return False
+        else:
+            return True
+    # to confirm whether the comment is a reply or not 
 
-    @staticmethod
-    def from_json(json_comment):
-        body = json_comment.get('body')
-        if body is None or body == '':
-            raise ValidationError('comment does not have a body')
-        return Comment(body=body)
-
+    def followed_name(self):
+        if self.is_reply():
+            return self.followed.first().followed.author         
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)

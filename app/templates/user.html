@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
 {% block title %}吐槽{% endblock %}
 
 {% block page_content %}
@@ -35,4 +37,9 @@
 <h3>{{ user.username }} 的吐槽</h3>
 {% include '_posts.html' %}
 {% include '_comments.html' %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.user', username=user.username) }}
+</div>
+{% endif %}
 {% endblock %}

@@ -14,7 +14,7 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     username = StringField('用户名', validators=[
         Required(), Length(1, 64)])
-    password = PasswordField('密码', validators=[
+    password = PasswordField('密码(至少五位)', validators=[
         Required(),Length(min=5, max=25), EqualTo('password2', message='两次输入密码必须一致')])
     password2 = PasswordField('确认密码', validators=[Required()])
     location = StringField('所在地(选填)')

@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
 from wtforms import StringField, TextAreaField,SubmitField
-from wtforms.validators import Required, Length
+from wtforms.validators import Required, Length,DataRequired
 from flask_pagedown.fields import PageDownField
 from wtforms import ValidationError
 from ..models import User
@@ -28,7 +28,14 @@ class PostForm(FlaskForm):
     submit = SubmitField('提交')
 
 class CommentForm(FlaskForm):
-    body = StringField("评论",validators=[Required()])
+    body = PageDownField("评论",validators=[Required()])
+    follow = StringField(validators=[DataRequired()])
+    submit = SubmitField('提交')
+
+class AnonymousCommentForm(FlaskForm):
+    name = StringField('昵称', validators=[Required(),Length(0, 64)])
+    body = PageDownField("评论",validators=[Required()])
+    follow = StringField(validators=[DataRequired()])
     submit = SubmitField('提交')
 
 class UploadForm(FlaskForm):

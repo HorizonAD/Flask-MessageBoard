@@ -1,18 +1,36 @@
 <ul class="comments">
     {% for comment in comments %}
     <li class="comment">
+        {% if comment.comment_type == 'reply' %}
+                <p class="comment-reply-info">回复给
+                    {% if comment.followed_name() %}
+                        {{ comment.followed_name().username }}
+                    {% else %}
+                        {{ comment.reply_to }}
+                    {% endif %}
+                    :
+                </p>
+        {% endif %}
         <div class="comment-thumbnail">
-            <a href="{{ url_for('.user', username=comment.author.username) }}">
+            {% if comment.author %}
+                <a href="{{ url_for('.user', username=comment.author.username) }}">
                 {% if comment.author.avatar is none %}
                 <img class="img-rounded profile-thumbnail" width="40" height="40" src="http://on2mh1s1f.bkt.clouddn.com/defaulted.png">
                 {% else %}
                 <img class="img-rounded profile-thumbnail" width="40" height="40" src="{{ url_for('main.get_file',filename=comment.author.avatar) }}">
                 {% endif %}
-            </a>
+                </a>
+            {% else %}
+                <img class="img-rounded profile-thumbnail" width="40" height="40" src="http://on2mh1s1f.bkt.clouddn.com/defaulted.png">
+            {% endif %}
         </div>
         <div class="comment-content">
             <div class="comment-date">{{ moment(comment.timestamp).fromNow() }}</div>
+            {% if comment.author %}
             <div class="comment-author"><a href="{{ url_for('.user', username=comment.author.username) }}">{{ comment.author.username }}</a></div>
+            {% else %}
+            <div class="comment-author">{{ comment.anonymoususer }}</div>
+            {% endif %}
             <div class="comment-body">
                 {% if comment.body_html %}
                     {{ comment.body_html | safe }}
@@ -21,11 +39,18 @@
                 {% endif %}
             </div>
             <div class="post-footer">
+            {% if comment.author %}
                 {% if current_user == comment.author %}
                     <a href="{{ url_for('.delete_comment', id=comment.id) }}">
-                        <span class="label label-primary">删除</span>
+                        <button class="btn btn-sm btn-info">删除</button>
                     </a>
                 {% endif %}
+            {% endif %}
+            {% if comment.author.username %}
+            <button class="btn btn-sm btn-info" onclick="go_to_reply({{ comment.id }},'{{ comment.author.username }}')">回复</button>
+            {% else %}
+            <button class="btn btn-sm btn-info" onclick="go_to_reply({{ comment.id }},'{{ comment.anonymoususer }}')">回复</button>
+            {% endif %}
             </div>
         </div>
     </li>

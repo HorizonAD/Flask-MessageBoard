@@ -4,12 +4,14 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_pagedown import PageDown
+from flask_wtf.csrf import CSRFProtect
 from config import config
 
 bootstrap = Bootstrap()
 moment = Moment()
 db = SQLAlchemy()
 pagedown = PageDown()
+csrf = CSRFProtect()
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
@@ -25,6 +27,7 @@ def create_app(config_name):
     db.init_app(app)
     pagedown.init_app(app)
     login_manager.init_app(app)
+    csrf.init_app(app)
 
     #把所有请求重定向到安全的HTTP
     if not app.debug and not app.testing and not app.config['SSL_DISABLE']:

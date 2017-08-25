@@ -4,6 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 #初始化配置
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you cannot guess me'
+    WTF_CSRF_SECRET_KEY = 'this is very difficult'
     SSL_DISABLE = False #默认打开SSL
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False

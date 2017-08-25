@@ -23,17 +23,17 @@
             <div class="post-footer">
                 {% if current_user == post.author %}
                 <a href="{{ url_for('.edit', id=post.id) }}">
-                    <span class="label label-primary">编辑</span>
+                    <button class="btn btn-sm btn-info">编辑</button>
                 </a>
                 <a href="{{ url_for('.delete_post', id=post.id) }}">
-                        <span class="label label-primary">删除</span>
+                       <button class="btn btn-sm btn-info">删除</button>
                     </a>
                 {% endif %}
                 <a href="{{ url_for('.post', id=post.id) }}">
-                    <span class="label label-default">Permalink</span>
+                    <button class="btn btn-sm btn-info">Permalink</button>
                 </a>
                 <a href="{{ url_for('.post', id=post.id) }}#comments">
-                    <span class="label label-primary">{{ post.comments.count() }}评论</span>
+                    <button class="btn btn-sm btn-info">{{ post.comments.count() }}评论</button>
                 </a>
             </div>
         </div>
