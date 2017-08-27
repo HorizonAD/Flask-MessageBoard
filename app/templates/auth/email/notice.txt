@@ -1,0 +1,7 @@
+尊敬的管理员：
+
+您的吐槽网站有新消息,用户{{ user }}
+
+点击链接
+
+{{ url_for('main.post', id=post_id, _external=True) }}查看

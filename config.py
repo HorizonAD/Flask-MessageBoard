@@ -5,7 +5,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you cannot guess me'
     WTF_CSRF_SECRET_KEY = 'this is very difficult'
-    SSL_DISABLE = False #默认打开SSL
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
@@ -17,6 +16,15 @@ class Config:
     UPLOAD_FOLDER= os.getcwd()+'/app/upload/avatar'
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024 #文件最大限制16M,仅需配置
     ALLOWED_EXTENSIONS = set(['bmp','svg','png','jpg','jpeg','gif'])
+    #邮件配置
+    FLASKQ_MAIL_SENDER = '吐槽'
+    MAIL_SERVER = "smtp.163.com"
+    MAIL_PROT = 25
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or "flywinky@163.com"
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or "lclxzhavyznfc163"
+    MAIL_DEBUG = True
 
     @staticmethod
     def init_app(app):

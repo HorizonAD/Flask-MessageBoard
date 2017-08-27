@@ -8,6 +8,7 @@ from datetime import datetime
 from .forms import EditProfileForm, CommentForm,PostForm,UploadForm,AnonymousCommentForm
 from .. import db
 from ..models import User, Post, Comment,Follow
+from ..email import send_email
 
 @main.after_app_request
 def after_request(response):
@@ -29,6 +30,10 @@ def index():
             post = Post(body=form.body.data,
                         author=current_user._get_current_object())
             db.session.add(post)
+            send_email('328588917@qq.com', '新吐槽',
+                   'auth/email/notice', 
+                   post_id=post.id,
+                   user=current_user._get_current_object())
             flash('槽点已发布')
             return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
@@ -89,6 +94,8 @@ def post(id):
                     comment.reply_to = followed.author.username
                 db.session.add(f)
                 db.session.add(comment)
+            send_email('328588917@qq.com', '新评论',
+                   'auth/email/notice',post_id=post.id, user=form.name.data)    
             flash('评论已发布')
             return redirect(url_for('.post', id=post.id, page=-1))
     else:
@@ -109,6 +116,8 @@ def post(id):
                     comment.reply_to = followed.author.username
                 db.session.add(f)
                 db.session.add(comment)
+            send_email('328588917@qq.com', '新评论',
+                   'auth/email/notice', post_id=post.id,user=current_user._get_current_object())    
             flash('评论已发布')
             return redirect(url_for('.post', id=post.id, page=-1))
     page = request.args.get('page', 1, type=int)

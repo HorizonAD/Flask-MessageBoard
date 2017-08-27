@@ -137,6 +137,7 @@ class Comment(db.Model):
         for i in range(count):
             a = Post.query.offset(randint(0, post_count - 1)).first()
             c = Comment(body=forgery_py.lorem_ipsum.sentences(randint(3, 5)),
+                        anonymoususer=forgery_py.internet.user_name(True),
                         timestamp=forgery_py.date.date(True),
                         post=a)
             db.session.add(c)
@@ -154,13 +155,19 @@ class Comment(db.Model):
         comment_count = Comment.query.count()
         for i in range(count):
             followed = Comment.query.offset(randint(0, comment_count - 1)).first()
+            if followed.comment_type=='reply':
+                continue
             c = Comment(body=forgery_py.lorem_ipsum.sentences(randint(3, 5)),
+                        anonymoususer=forgery_py.internet.user_name(True),
                         timestamp=forgery_py.date.date(True),
                         post=followed.post, comment_type='reply',
-                        reply_to=followed.author)
+                        reply_to=followed.anonymoususer)
             f = Follow(follower=c, followed=followed)
             db.session.add(f)
-            db.session.commit()
+            try:
+                db.session.commit()
+            except:
+                db.session.rollback()
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
