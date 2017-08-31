@@ -1,7 +1,7 @@
 # MessageBoard
 演示：(不久可能会失效)[吐点槽吧](http://cumt.studio/)		
 		
-项目结构
+# 项目结构
 ```
 |- app
 	|- auth 用户模块
@@ -41,11 +41,12 @@
 	|- email.py email配置以及异步实现
 	|- exceptions.py 异常处理	
 	|- models.py 数据库模型	
+|- migrations 数据库迁移文件	
 |- config.py 配置文件
 |- manage.py run文件
 ```
 
-后端考核任务
+# 后端考核任务
 
 《吐槽》
 
@@ -56,3 +57,15 @@
 - 增加一问一答形式回复功能,游客功能以及游客评论不能发布吐槽
 
 - 增加新评论邮件推送管理员
+
+# 数据库迁移,命令
+在迁移中sqlite不支持删除数据库字段
+```
+python manage.py db stamp 版本号 强制修改当前版本
+python manage.py db init 创建migrate文件夹 注意这时候数据库是里面的version文件夹是空de
+python manage.py db migrate -m "message" 根据模型设置生成迁移文件
+python manage.py db history 查看migrate历史
+python manage.py db upgrade 版本名 不是"message",写版本号的前缀也行
+python manage.py db downgrade
+python manage.py db current 查python manager.py看当前版本
+```

@@ -34,12 +34,22 @@
         </p>
     </div>
 </div>
-<h3>{{ user.username }} 的吐槽</h3>
+<h4>{{ user.username }}的吐槽</h4>
 {% include '_posts.html' %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(posts_pagination, '.user', username=user.username) }}
+</div>
+{% endif %}
+<h4>{{ user.username }} 的评论</h4>
 {% include '_comments.html' %}
 {% if pagination %}
 <div class="pagination">
-    {{ macros.pagination_widget(pagination, '.user', username=user.username) }}
+    {{ macros.pagination_widget(comments_pagination, '.user', username=user.username) }}
 </div>
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/comment.js') }}"></script>
 {% endblock %}

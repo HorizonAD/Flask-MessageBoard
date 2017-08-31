@@ -12,9 +12,13 @@ function go_to_reply(id, author) {
     //回滚到评论框
     $('#follow').val(id);
     //重新赋给id
-    $("form").prepend(
+    $("#submit-comment").prepend(
     	'<div class="alert alert-info alert-dismissable" id="reply-dialog-box">' +
         '<button type="button" class="close" data-dismiss="alert" onclick="undo_reply()">&times;</button>' +
         '回复给<strong><i>' + author +'</i></strong> </div>');
-    //在class=comment-form前面加
+    //在id=submit-comment前面加
+}
+//搜索跳转函数
+function return_post(url) {
+    window.location.href=url;
 }
