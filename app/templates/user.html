@@ -36,14 +36,14 @@
 </div>
 <h4>{{ user.username }}的吐槽</h4>
 {% include '_posts.html' %}
-{% if pagination %}
+{% if posts_pagination %}
 <div class="pagination">
     {{ macros.pagination_widget(posts_pagination, '.user', username=user.username) }}
 </div>
 {% endif %}
 <h4>{{ user.username }} 的评论</h4>
 {% include '_comments.html' %}
-{% if pagination %}
+{% if comments_pagination %}
 <div class="pagination">
     {{ macros.pagination_widget(comments_pagination, '.user', username=user.username) }}
 </div>
