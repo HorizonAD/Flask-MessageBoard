@@ -38,6 +38,11 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated and current_user.username=='八一' %}
+                    <li><a href="./MQo!V5JOYqGX5yvj">后台管理</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('auth.login') }}">后台管理</a></li>    
+                {% endif %}    
                 {% if current_user.is_authenticated %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{current_user.username}} <b class="caret"></b>

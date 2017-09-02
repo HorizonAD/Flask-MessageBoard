@@ -25,6 +25,12 @@ class Config:
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or "flywinky@163.com"
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or "lclxzhavyznfc163"
     MAIL_DEBUG = True
+    #debugtoolbar配置
+    DEBUG = True
+    DEBUG_TB_PROFILER_ENABLED=True #性能显示
+    DEBUG_TB_INTERCEPT_REDIRECTS=False #不拦截重定向
+    # flask-babelex配置,汉化admin页面
+    BABEL_DEFAULT_LOCALE='zh_CN'
 
     @staticmethod
     def init_app(app):
@@ -32,7 +38,6 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 

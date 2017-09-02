@@ -1,5 +1,5 @@
 # MessageBoard
-演示：(不久可能会失效)[吐点槽吧](http://cumt.studio/)		
+演示：(不久可能会失效)[吐点槽吧](http://liuyan.flywinky.top/)		
 		
 # 项目结构
 ```
@@ -14,9 +14,17 @@
 		|- forms.py
 		|- views.py
 	|- satatic
-		favicon.gif
-		styles.css
+		|- css
+			|- style.css
+		|- images
+			|- admin.gif
+			|- favicon.gif
+		|- js
+			|- comment.js
+			|- search.js
 	|- templates
+		|- admin
+			|- admin.html
 		|- auth 用户
 			|- change_password.html 
 			|- login.html
@@ -39,7 +47,8 @@
 		|- avatar 用户头像
 	|- __init__.py 初始化app文件
 	|- email.py email配置以及异步实现
-	|- exceptions.py 异常处理	
+	|- exceptions.py
+	|- admin.py
 	|- models.py 数据库模型	
 |- migrations 数据库迁移文件	
 |- config.py 配置文件
@@ -59,6 +68,8 @@
 - 增加新评论邮件推送管理员
 
 - 增加首页搜索功能以及comment路由
+
+- 增加admin模块
 
 # 数据库迁移,命令
 在迁移中sqlite不支持删除数据库字段

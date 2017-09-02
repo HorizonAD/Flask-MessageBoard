@@ -1,23 +1,20 @@
+import os.path as op
 from flask import Flask
-from flask_moment import Moment
-from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from flask_pagedown import PageDown
-from flask_wtf.csrf import CSRFProtect
-from flask_mail import Mail
 from config import config
-
-bootstrap = Bootstrap()
-moment = Moment()
-db = SQLAlchemy()
-pagedown = PageDown()
-csrf = CSRFProtect()
-mail = Mail()
-
-login_manager = LoginManager()
-login_manager.session_protection = 'strong'
-login_manager.login_view = 'auth.login'
+from .admin import UserModelView,PostModelView,CommentModelView,FileAdmin
+from flask_admin import AdminIndexView
+from .exceptions import (
+    bootstrap,
+    moment,
+    db,
+    pagedown,
+    csrf,
+    mail,
+    debugtoolbar,
+    admin,
+    login_manager,
+    babel
+)
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -31,6 +28,21 @@ def create_app(config_name):
     login_manager.init_app(app)
     csrf.init_app(app)
     mail.init_app(app)
+    debugtoolbar.init_app(app)
+    babel.init_app(app)
+    admin.init_app(app,
+        index_view=AdminIndexView(
+            name=u'后台管理',
+            template='admin/admin.html',
+            url='/MQo!V5JOYqGX5yvj'
+            )
+        )
+    admin.add_view(UserModelView(db.session,name='用户管理'))
+    admin.add_view(PostModelView(db.session,name='留言管理'))
+    admin.add_view(CommentModelView(db.session,name='评论管理'))
+    #文件管理    
+    path = op.join(op.dirname(__file__), 'upload/avatar')
+    admin.add_view(FileAdmin(path, '/upload', name='文件管理'))    
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
