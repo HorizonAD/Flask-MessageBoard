@@ -92,6 +92,28 @@ C:\Users\bayi\Desktop\message
 |- manage.py run文件
 ```
 
+# 后端考核任务
+
+《吐槽》
+
+根据狗书假期修改版
+
+- 增加头像自定义,文件上传部分可拓展
+
+- 增加一问一答形式回复功能,游客功能以及游客评论不能发布吐槽
+
+- 增加新评论邮件推送管理员
+
+- 增加首页搜索功能以及comment路由
+
+- 增加admin模块(使用flask-admin插件)
+
+- 结合bootstrap3,自定义后台[https://adminlte.io/premium](https://adminlte.io/premium)
+
+- 文件浏览前端样式[https://github.com/blueimp/jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload)
+
+![演示](http://on2mh1s1f.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20170906153214.png?imageView2/0/q/75|watermark/2/text/5YWr5LiA/font/5b6u6L2v6ZuF6buR/fontsize/600/fill/I0U5MjQyNA==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim)
+
 # 所有url
 可以使用python manage.py showurls生成
 ```
@@ -187,28 +209,6 @@ C:\Users\bayi\Desktop\message
 /upload_file                                  main.upload_file
 /user/<username>                              main.user
 ```
-
-# 后端考核任务
-
-《吐槽》
-
-根据狗书假期修改版
-
-- 增加头像自定义,文件上传部分可拓展
-
-- 增加一问一答形式回复功能,游客功能以及游客评论不能发布吐槽
-
-- 增加新评论邮件推送管理员
-
-- 增加首页搜索功能以及comment路由
-
-- 增加admin模块(使用flask-admin插件)
-
-- 结合bootstrap3,自定义后台[https://adminlte.io/premium](https://adminlte.io/premium)
-
-- 文件浏览前端样式[https://github.com/blueimp/jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload)
-![演示](http://on2mh1s1f.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20170906153214.png?	
-imageView2/0/q/75|watermark/2/text/5YWr5LiA/font/5b6u6L2v6ZuF6buR/fontsize/600/fill/I0U5MjQyNA==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim)
 
 # 数据库迁移,命令
 在迁移中sqlite不支持删除数据库字段
