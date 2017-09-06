@@ -9,11 +9,12 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
     FLASKY_POSTS_PER_PAGE = 20
-    FLASKY_FOLLOWERS_PER_PAGE = 50
+    FLASKY_USERS_PER_PAGE = 10
     FLASKY_COMMENTS_PER_PAGE = 30
     FLASKY_SLOW_DB_QUERY_TIME=0.5
     #上传图片配置
     UPLOAD_FOLDER= os.getcwd()+'/app/upload/avatar'
+    THUMBNAIL_FOLDER = os.getcwd()+'/app/upload/avatar-thumbnail'
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024 #文件最大限制16M,仅需配置
     ALLOWED_EXTENSIONS = set(['bmp','svg','png','jpg','jpeg','gif'])
     #邮件配置

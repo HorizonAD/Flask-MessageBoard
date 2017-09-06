@@ -3,7 +3,7 @@ import bleach
 from markdown import markdown
 from flask_login import UserMixin,AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from .exceptions import db,login_manager
+from .exceptions import db,login_manager,admin_login_manager
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     avatar = db.Column(db.String(128),default=None)
     location = db.Column(db.String(64))
     about_me = db.Column(db.Text())
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
 
@@ -57,7 +58,7 @@ login_manager.anonymous_user = AnonymousUser
 
 @login_manager.user_loader
 def load_user(userid):
-    return User.query.get(int(userid))
+    return User.query.get(int(userid))  
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -186,3 +187,67 @@ class Comment(db.Model):
             return self.followed.first().followed.author         
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
+
+
+class Role(db.Model):
+    __tablename__ = 'role'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True)
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    admins = db.relationship('Admin', backref='role')
+
+    def __repr__(self):
+        return "<Role %r>" % self.name
+
+class Admin(db.Model,UserMixin):
+    __tablename__ = 'admin'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), unique=True)
+    password_hash = db.Column(db.String(128))
+    role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    adminlogs = db.relationship('Adminlog', backref='admin')
+    oplogs = db.relationship('Oplog', backref='admin')
+
+    #设置该属性不可读
+    @property
+    def password(self):
+        raise AttributeError('password不可读')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def __repr__(self):
+        return "<Admin %r>" % self.name
+
+@admin_login_manager.user_loader
+def load_admin(adminid):
+    return Admin.query.get(int(adminid))        
+
+class Adminlog(db.Model):
+    __tablename__ = 'adminlog'
+    id = db.Column(db.Integer, primary_key=True)
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'))
+    ip = db.Column(db.String(20))
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return "<Adminlog %r>" % self.id
+
+
+class Oplog(db.Model):
+    __tablename__ = 'oplog'
+    id = db.Column(db.Integer, primary_key=True)
+    admin_id = db.Column(db.Integer, db.ForeignKey('admin.id'))
+    ip = db.Column(db.String(20))
+    reason = db.Column(db.String(600))
+    addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return "<Oplog %r>" % self.id

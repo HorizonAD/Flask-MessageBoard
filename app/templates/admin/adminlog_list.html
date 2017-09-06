@@ -1,0 +1,63 @@
+{% extends 'admin/admin.html' %}
+{% import "_macros.html" as macros %}
+
+{% block content %}
+    <section class="content-header">
+        <h1>后台管理系统</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 日志管理</a></li>
+            <li class="active">管理员登录日志列表</li>
+        </ol>
+    </section>
+    <section class="content" id="showcontent">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header">
+                        <h3 class="box-title">管理员登录日志列表</h3> 
+                    </div>
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                            <tbody>
+                            <tr>
+                                <th>编号</th>
+                                <th>管理员</th>
+                                <th>登录时间</th>
+                                <th>登录IP</th>
+                            </tr>
+                            {% for adminlog in adminlogs %}
+                            <tr>
+                                <td>{{ adminlog.id }}</td>
+                                <td>{{ adminlog.admin.name }}</td>
+                                <td>{{ moment(adminlog.addtime).format('YYYY-M-D h:mm:ss a') }}</td>
+                                <td>{{ adminlog.ip }}</td>
+                                {% if admin.role.name=='超级管理员' %}
+                                <td>
+                                    <a href="{{ url_for('Admin.delete_adminlog', id=adminlog.id) }}" class="label label-danger">删除</a>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer clearfix">
+                        {% if pagination %}
+                        <ul class="pagination pagination-sm no-margin pull-right">
+                        {{ macros.pagination_widget(pagination,'.adminlog_list') }}
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('#g-8').addClass("active")
+            $('#g-8-2').addClass("active")
+        })
+    </script>
+{% endblock %}

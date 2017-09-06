@@ -1,0 +1,21 @@
+{% extends 'admin/admin.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+    <section class="content-header">
+        <h1>后台管理系统</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> 个人资料</a></li>
+            <li class="active">修改密码</li>
+        </ol>
+    </section>
+    <section class="content" id="showcontent">
+        <div class="col-md-4">
+            {% for msg in get_flashed_messages() %}
+            <p class="login-box-msg">{{ msg }}</p>
+            {% endfor %}
+            {{ wtf.quick_form(form) }}
+            {{ form.csrf_token }}
+        </div>
+    </section>
+{% endblock %}

@@ -8,7 +8,7 @@ class LoginForm(FlaskForm):
     username = StringField('用户名', validators=[Required(), Length(1, 64)])
     password = PasswordField('密码', validators=[Required()])
     remember_me = BooleanField('记住我')
-    submit = SubmitField('登陆')
+    submit = SubmitField('登录')
 
 
 class RegistrationForm(FlaskForm):
@@ -32,12 +32,3 @@ class ChangePasswordForm(FlaskForm):
         Required(), Length(min=5, max=25), EqualTo('password2', message='两次输入密码必须一致')])
     password2 = PasswordField('确认新密码', validators=[Required()])
     submit = SubmitField('修改密码')
-
-
-class ChangeUsernameForm(FlaskForm):
-    username = StringField('新用户名', validators=[Required(), Length(1, 64)])
-    submit = SubmitField('修改用户名')
-
-    def validate_username(self, field):
-        if User.query.filter_by(username=field.data).first():
-            raise ValidationError('用户名已存在')

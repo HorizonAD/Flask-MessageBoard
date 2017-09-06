@@ -33,8 +33,8 @@ def create_app(config_name):
     admin.init_app(app,
         index_view=AdminIndexView(
             name=u'后台管理',
-            template='admin/admin.html',
-            url='/MQo!V5JOYqGX5yvj'
+            template='admin/admin-v1.html',
+            url='/6oPT' #这里可以自己生成很长的随机数
             )
         )
     admin.add_view(UserModelView(db.session,name='用户管理'))
@@ -49,5 +49,8 @@ def create_app(config_name):
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    from .Admin import admin as Admin_blueprint
+    app.register_blueprint(Admin_blueprint, url_prefix='/admin') #这个url可以设置成随机种子以防爆破
 
     return app

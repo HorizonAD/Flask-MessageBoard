@@ -23,5 +23,9 @@ login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 
+admin_login_manager = LoginManager()
+admin_login_manager.session_protection = 'strong'
+admin_login_manager.login_view = 'Admin.login'
+
 class ValidationError(ValueError):
     pass

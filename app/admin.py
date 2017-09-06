@@ -9,7 +9,7 @@ class FileAdmin(FileAdmin):
         if current_user.is_authenticated and current_user.username == "八一":
             return True
         return False
-    form_base_class = Form #CSRF引入
+    form_base_class = Form #CSRF引入 
     can_upload = False
     can_rename = False
     can_mkdir = False

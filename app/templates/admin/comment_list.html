@@ -1,0 +1,65 @@
+{% extends 'admin/admin.html' %}
+{% import "_macros.html" as macros %}
+
+{% block content %}
+<section class="content-header">
+            <h1>后台管理系统</h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> 评论管理</a></li>
+                <li class="active">评论列表</li>
+            </ol>
+        </section>
+        <section class="content" id="showcontent">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">评论列表</h3>
+                        </div>
+                        <div class="box-body box-comments">
+                            {% for comment in comments %}
+                            <div class="box-comment">
+                                {% if comment.author.avatar==None or comment.anonymoususer!=None %}
+                                <img class="img-circle img-sm" width="60" height="60" src="http://on2mh1s1f.bkt.clouddn.com/defaulted.png" alt="User Image">
+                                {% else %}
+                                <img class="img-circle img-sm" width="60" height="60" src="{{ url_for('main.get_file',filename=comment.author.avatar) }}" alt="User Image">
+                                {% endif %}
+                                <div class="comment-text">
+                                    <span class="username">
+                                        {% if comment.anonymoususer!=None %}
+                                        {{ comment.anonymoususer }}
+                                        {% else %}
+                                        {{ comment.author.username }}
+                                        {% endif %}
+                                        <span class="text-muted pull-right">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            &nbsp;
+                                            {{ moment(comment.timestamp).format('YYYY-M-D h:mm:ss a') }}
+                                        </span>
+                                    </span>
+                                    {{ comment.body }}
+                                <br><a href="{{ url_for('Admin.delete_comment', id=comment.id) }}" class="label label-danger pull-right">删除</a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="box-footer clearfix">
+                            {% if pagination %}
+                            <ul class="pagination pagination-sm no-margin pull-right">
+                            {{ macros.pagination_widget(pagination,'.comment_list') }}
+                            </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('#g-6').addClass("active")
+            $('#g-6-1').addClass("active")
+        })
+    </script>
+{% endblock %}

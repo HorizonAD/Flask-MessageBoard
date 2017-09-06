@@ -1,0 +1,14 @@
+{% extends 'admin/admin.html' %}
+
+{% block content %}
+    <section class="content-header">
+        <h1>后台管理系统</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i>首页</a></li>
+            <li class="active">主面板</li>
+        </ol>
+    </section>
+    <section class="content">
+        <img src="{{ url_for('static', filename='images/admin.gif') }}" class="img-circle center-block"/>
+    </section>
+{% endblock %}

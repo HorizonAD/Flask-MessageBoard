@@ -1,4 +1,7 @@
 import os,hashlib
+import PIL
+import traceback
+from PIL import Image
 from werkzeug.utils import secure_filename
 from flask import render_template, redirect, url_for, abort, flash, request,current_app, make_response,send_from_directory
 from flask_login import login_required, current_user
@@ -226,7 +229,7 @@ def show_all():
 
 @main.route('/avatar/<filename>')
 def get_file(filename):
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'],filename)    
+    return send_from_directory(current_app.config['THUMBNAIL_FOLDER'],filename)    
 
 @main.route('/upload_file',methods = ['GET','POST'])
 @login_required
@@ -243,11 +246,23 @@ def upload_file():
             #重命名,format字符串格式化
             filename = hashlib.md5('{0}_{1}'.format(filename,nowtime).encode("gb2312")).hexdigest()+"."+filename.rsplit('.',1)[1]
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'],filename))
+            try:
+                base_width = 500
+                img = Image.open(os.path.join(current_app.config['UPLOAD_FOLDER'],filename))
+                w_percent = (base_width / float(img.size[0]))
+                h_size = int((float(img.size[1]) * float(w_percent)))
+                img = img.resize((base_width, h_size), PIL.Image.ANTIALIAS)
+                img.save(os.path.join(current_app.config['THUMBNAIL_FOLDER'],filename))
+            except:
+                flash(traceback.format_exc())
             if current_user.avatar:
                 try:
+                    file_thumb_path = os.path.join(current_app.config['THUMBNAIL_FOLDER'],current_user.avatar)
                     os.remove(os.path.join(current_app.config['UPLOAD_FOLDER'],current_user.avatar))
+                    if os.path.exists(file_thumb_path):
+                        os.remove(file_thumb_path)
                 except OSError:
-                    return {"error": u'文件不存在'}
+                    flash('原头像文件已删除')
             current_user.avatar=filename
             flash('头像已更改')
             return redirect(url_for('.user', username=current_user.username))
