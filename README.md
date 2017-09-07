@@ -108,9 +108,10 @@ C:\Users\bayi\Desktop\message
 
 - 增加admin模块(使用flask-admin插件)
 
-- 结合bootstrap3,自定义后台[https://adminlte.io/premium](https://adminlte.io/premium)
+- 结合bootstrap3,自定义后台 [https://adminlte.io/premium](https://adminlte.io/premium)
+  Bootstrap3部分静态文件在部署时可以删去
 
-- 文件浏览前端样式[https://github.com/blueimp/jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload)
+- 文件浏览前端样式 [https://github.com/blueimp/jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload)
 
 ![演示](http://on2mh1s1f.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20170906153214.png?imageView2/0/q/75|watermark/2/text/5YWr5LiA/font/5b6u6L2v6ZuF6buR/fontsize/600/fill/I0U5MjQyNA==/dissolve/100/gravity/SouthEast/dx/10/dy/10|imageslim)
 

@@ -269,26 +269,30 @@ def role_add():
 @admin.route("/role/list")
 @admin_login_req
 def role_list():
+    current_admin=Admin.query.filter_by(name=session["admin"]).first()
     page = request.args.get('page', 1, type=int)
     pagination = Role.query.order_by(Role.addtime).paginate(
         page, per_page=current_app.config['FLASKY_USERS_PER_PAGE'],
         error_out=False)
     roles = pagination.items
     return render_template('admin/role_list.html',
-        roles=roles,pagination=pagination)
+        roles=roles,current_admin=current_admin,pagination=pagination)
 
 @admin.route("/delete_role/<int:id>",methods=['GET','POST'])
 @admin_login_req
 def delete_role(id):
     role=Role.query.get_or_404(id)
     current_admin=Admin.query.filter_by(name=session["admin"]).first()
-    adminOplog=Oplog(
-        reason='删除角色',
-        ip=request.environ['REMOTE_ADDR'],
-        admin=current_admin)
-    db.session.add(adminOplog)
-    db.session.delete(role)    
-    return redirect(url_for('.role_list'))         
+    if current_admin.role.name=='超级管理员':
+        adminOplog=Oplog(
+            reason='删除角色',
+            ip=request.environ['REMOTE_ADDR'],
+            admin=current_admin)
+        db.session.add(adminOplog)
+        db.session.delete(role)    
+        return redirect(url_for('.role_list'))
+    else:
+        return redirect(url_for('.role_list'))            
 
 @admin.route("/admin/add",methods=['GET','POST'])
 @admin_login_req

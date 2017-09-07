@@ -31,10 +31,13 @@
                                 <td>{{ role.name }}</td>
                                 <td>{{ moment(role.addtime).format('YYYY-M-D h:mm:ss a') }}</td>
                                 <td>
-                                    <a href="{{ url_for('Admin.delete_role', id=role.id) }}"><button class="btn btn-danger delete" data-type="DELETE">
+                                    <a href="{{ url_for('Admin.delete_role', id=role.id) }}">
+                                    {% if current_admin.role.name=='超级管理员' %}
+                                    <button class="btn btn-danger delete" data-type="DELETE">
                                     <i class="glyphicon glyphicon-trash"></i>
                                     <span>删除</span>
                                     </button></a>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}

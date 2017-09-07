@@ -1,8 +1,10 @@
 import os
+from datetime import timedelta
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 #初始化配置
 class Config:
+    PERMANENT_SESSION_LIFETIME= timedelta(minutes=10) #会话过期时间
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you cannot guess me'
     WTF_CSRF_SECRET_KEY = 'this is very difficult'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
