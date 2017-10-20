@@ -225,6 +225,10 @@ python manage.py db current 查python manager.py看当前版本
 
 # 说明
 
+我设置了用户为<strong>八一</strong>才能进到后台链接的
+
+![逻辑](http://on2mh1s1f.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20170924111631.jpg)
+
 有部分Bug和未实现功能,比如flask-admin插件文件管理功能,等等.
 
 想修改的小伙伴可以Pull requests
