@@ -1,3 +1,4 @@
+#coding=utf-8
 from datetime import datetime
 import bleach
 from markdown import markdown

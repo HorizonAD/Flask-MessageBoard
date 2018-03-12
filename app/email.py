@@ -1,3 +1,4 @@
+#coding=utf-8
 from threading import Thread #异步发送邮件
 from flask import current_app,render_template
 from flask_mail import Message

@@ -2,7 +2,7 @@
 import os
 from app import create_app, db
 from app.models import User,Post,Comment,Role,Admin
-from flask_script import Manager, Shell
+from flask_script import Manager, Shell ,Server
 from flask_script.commands import ShowUrls,Clean
 #Flask-Script是一个Flask拓展，为Flask程序添加了一个命令行解析器，它自带了一组常用选项，而且还支持自定义命令
 from flask_migrate import Migrate, MigrateCommand
@@ -23,6 +23,7 @@ def make_shell_context():
     Admin=Admin
 ) #打开命令行时默认导入的参数
 
+manager.add_command("runserver", Server(host = '0.0.0.0'))
 manager.add_command("shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 manager.add_command('showurls', ShowUrls())

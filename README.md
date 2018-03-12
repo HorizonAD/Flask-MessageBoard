@@ -1,7 +1,20 @@
-# MessageBoard(python3.6+flask+Bootstrap3)
-演示：(不久可能会失效)[吐点槽吧](http://liuyan.flywinky.top/)
+# 留言板
+![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)  ![Python](https://img.shields.io/badge/python-%203.4,%203.5,%203.6-blue.svg)  ![Flask-JWT](https://img.shields.io/badge/Bootstrap-3.0-yellowgreen.svg)
+
+在线Demo：(不久可能会失效)[吐点槽吧](http://liuyan.flywinky.top/)
 
 # 本地预览
+
+## Docker启动
+
+- 输入下面指令一键启动(需提前安装docker-compose)
+```
+docker-compose up -d
+```
+浏览器打开 http://127.0.0.1:5000 即可
+
+## 源码安装
+
 - clone到本地
 ```
 git clone https://github.com/bayi27/flask-MessageBoard.git
@@ -117,99 +130,6 @@ C:\Users\bayi\Desktop\message
 
 # 所有url
 可以使用python manage.py showurls生成
-```
-/                                             main.index
-/6oPT/                                        admin.index
-/6oPT/comment/                                comment.index_view
-/6oPT/comment/action/                         comment.action_view
-/6oPT/comment/ajax/lookup/                    comment.ajax_lookup
-/6oPT/comment/ajax/update/                    comment.ajax_update
-/6oPT/comment/delete/                         comment.delete_view
-/6oPT/comment/details/                        comment.details_view
-/6oPT/comment/edit/                           comment.edit_view
-/6oPT/comment/export/<export_type>/           comment.export
-/6oPT/comment/new/                            comment.create_view
-/6oPT/fileadmin/                              fileadmin.index_view
-/6oPT/fileadmin/action/                       fileadmin.action_view
-/6oPT/fileadmin/b/<path:path>                 fileadmin.index_view
-/6oPT/fileadmin/delete/                       fileadmin.delete
-/6oPT/fileadmin/download/<path:path>          fileadmin.download
-/6oPT/fileadmin/edit/                         fileadmin.edit
-/6oPT/fileadmin/mkdir/                        fileadmin.mkdir
-/6oPT/fileadmin/mkdir/<path:path>             fileadmin.mkdir
-/6oPT/fileadmin/old_b/<path:path>             fileadmin.index
-/6oPT/fileadmin/old_index                     fileadmin.index
-/6oPT/fileadmin/rename/                       fileadmin.rename
-/6oPT/fileadmin/upload/                       fileadmin.upload
-/6oPT/fileadmin/upload/<path:path>            fileadmin.upload
-/6oPT/post/                                   post.index_view
-/6oPT/post/action/                            post.action_view
-/6oPT/post/ajax/lookup/                       post.ajax_lookup
-/6oPT/post/ajax/update/                       post.ajax_update
-/6oPT/post/delete/                            post.delete_view
-/6oPT/post/details/                           post.details_view
-/6oPT/post/edit/                              post.edit_view
-/6oPT/post/export/<export_type>/              post.export
-/6oPT/post/new/                               post.create_view
-/6oPT/static/<path:filename>                  admin.static
-/6oPT/user/                                   user.index_view
-/6oPT/user/action/                            user.action_view
-/6oPT/user/ajax/lookup/                       user.ajax_lookup
-/6oPT/user/ajax/update/                       user.ajax_update
-/6oPT/user/delete/                            user.delete_view
-/6oPT/user/details/                           user.details_view
-/6oPT/user/edit/                              user.edit_view
-/6oPT/user/export/<export_type>/              user.export
-/6oPT/user/new/                               user.create_view
-/_debug_toolbar/static/<path:filename>        _debug_toolbar.static
-/_debug_toolbar/views/sqlalchemy/sql_explain  debugtoolbar.sql_select
-/_debug_toolbar/views/sqlalchemy/sql_select   debugtoolbar.sql_select
-/_debug_toolbar/views/template/<key>          debugtoolbar.template_editor
-/_debug_toolbar/views/template/<key>          debugtoolbar.template_preview
-/_debug_toolbar/views/template/<key>/save     debugtoolbar.save_template
-/admin/                                       Admin.index
-/admin/admin/add                              Admin.admin_add
-/admin/admin/list                             Admin.admin_list
-/admin/adminlog/list                          Admin.adminlog_list
-/admin/comment/list                           Admin.comment_list
-/admin/delete/<string:filename>               Admin.delete
-/admin/delete_admin/<int:id>                  Admin.delete_admin
-/admin/delete_adminlog/<int:id>               Admin.delete_adminlog
-/admin/delete_comment/<int:id>                Admin.delete_comment
-/admin/delete_oplog/<int:id>                  Admin.delete_oplog
-/admin/delete_post/<int:id>                   Admin.delete_post
-/admin/delete_role/<int:id>                   Admin.delete_role
-/admin/delete_user/<int:id>                   Admin.delete_user
-/admin/file/<string:filename>                 Admin.get_file
-/admin/file/list                              Admin.file_list
-/admin/login                                  Admin.login
-/admin/logout                                 Admin.logout
-/admin/oplog/list                             Admin.oplog_list
-/admin/post/list                              Admin.post_list
-/admin/pwd                                    Admin.pwd
-/admin/role/add                               Admin.role_add
-/admin/role/list                              Admin.role_list
-/admin/thumb_file/<string:filename>           Admin.get_thumb_file
-/admin/user/list                              Admin.user_list
-/all                                          main.show_all
-/auth/change-password                         auth.change_password
-/auth/login                                   auth.login
-/auth/logout                                  auth.logout
-/auth/register                                auth.register
-/avatar/<filename>                            main.get_file
-/comment                                      main.comments
-/delete_comment/<int:id>                      main.delete_comment
-/delete_post/<int:id>                         main.delete_post
-/edit-profile                                 main.edit_profile
-/edit/<int:id>                                main.edit
-/post/<int:id>                                main.post
-/searchcomment                                main.searchcomment
-/searchpost                                   main.searchpost
-/static/<path:filename>                       static
-/static/bootstrap/<path:filename>             bootstrap.static
-/upload_file                                  main.upload_file
-/user/<username>                              main.user
-```
 
 # 数据库迁移,命令
 在迁移中sqlite不支持删除数据库字段
