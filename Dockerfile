@@ -5,4 +5,3 @@ COPY . /app/
 WORKDIR /app
 
 RUN pip install -r requirements.txt
-RUN chmod 664 data-dev.sqlite

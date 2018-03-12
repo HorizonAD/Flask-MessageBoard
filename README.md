@@ -1,11 +1,15 @@
 # 留言板
-![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)  ![Python](https://img.shields.io/badge/python-%203.4,%203.5,%203.6-blue.svg)  ![Flask-JWT](https://img.shields.io/badge/Bootstrap-3.0-yellowgreen.svg)
+![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)  ![Python](https://img.shields.io/badge/python-%203.4,%203.5,%203.6-blue.svg)  ![Bootstrap](https://img.shields.io/badge/Bootstrap-3.0-yellowgreen.svg)  ![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)
+
 
 在线Demo：(不久可能会失效)[吐点槽吧](http://liuyan.flywinky.top/)
 
 # 本地预览
 
 ## Docker启动
+
+- 修改docker-compose.yml中数据文件地址成在你服务器的绝对路径
+(使用sqlite,这样可以做好数据保存)
 
 - 输入下面指令一键启动(需提前安装docker-compose)
 ```
