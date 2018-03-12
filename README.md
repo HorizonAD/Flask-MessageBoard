@@ -1,5 +1,5 @@
 # 留言板
-![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)  ![Python](https://img.shields.io/badge/python-%203.4,%203.5,%203.6-blue.svg)  ![Bootstrap](https://img.shields.io/badge/Bootstrap-3.0-yellowgreen.svg)  ![Docker Automated build](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)
+![Packagist](https://img.shields.io/badge/license-MIT-blue.svg)  ![Python](https://img.shields.io/badge/python-%203.4,%203.5,%203.6-blue.svg)  ![Bootstrap](https://img.shields.io/badge/Bootstrap-3.0-yellowgreen.svg)  ![docker build](https://img.shields.io/badge/docker%20build-automated-green.svg)
 
 
 在线Demo：(不久可能会失效)[吐点槽吧](http://liuyan.flywinky.top/)
