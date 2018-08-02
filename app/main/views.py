@@ -244,7 +244,7 @@ def upload_file():
                 return redirect(url_for('.upload_file'))
             nowtime = datetime.now()
             #重命名,format字符串格式化
-            filename = hashlib.md5('{0}_{1}'.format(filename,nowtime).encode("gb2312")).hexdigest()+"."+filename.rsplit('.',1)[1]
+            filename = hashlib.sha256('{0}_{1}'.format(filename,nowtime).encode("gb2312")).hexdigest()+"."+filename.rsplit('.',1)[1]
             file.save(os.path.join(current_app.config['UPLOAD_FOLDER'],filename))
             try:
                 base_width = 500
