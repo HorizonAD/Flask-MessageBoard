@@ -52,7 +52,6 @@ def logout():
 def pwd():
     form=ChangePasswordForm()
     if form.validate_on_submit():
-        data=form.data
         admin=Admin.query.filter_by(name=session["admin"]).first()
         if admin.verify_password(form.old_password.data):
             admin.password=form.password.data
