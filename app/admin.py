@@ -6,7 +6,8 @@ from flask_wtf import Form
 from .models import User,Post,Comment
 
 class FileAdmin(FileAdmin):
-    def is_accessible(self):
+    @staticmethod
+    def is_accessible():
         if current_user.is_authenticated and current_user.username == "八一":
             return True
         return False
