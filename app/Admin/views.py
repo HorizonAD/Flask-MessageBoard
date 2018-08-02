@@ -76,10 +76,10 @@ def user_list():
     return render_template('admin/user_list.html',
         users=users,pagination=pagination)
 
-@admin.route("/delete_user/<int:id>",methods=['GET','POST'])
+@admin.route("/delete_user/<int:user_id>",methods=['GET','POST'])
 @admin_login_req
-def delete_user(id):
-    user=User.query.get_or_404(id)
+def delete_user(user_id):
+    user=User.query.get_or_404(user_id)
     for post in user.posts:
         db.session.delete(post)
     current_admin=Admin.query.filter_by(name=session["admin"]).first()
@@ -102,10 +102,10 @@ def post_list():
     return render_template('admin/post_list.html',
         posts=posts,pagination=pagination)
 
-@admin.route("/delete_post/<int:id>",methods=['GET','POST'])
+@admin.route("/delete_post/<int:post_id>",methods=['GET','POST'])
 @admin_login_req
-def delete_post(id):
-    post=Post.query.get_or_404(id)
+def delete_post(post_id):
+    post=Post.query.get_or_404(post_id)
     current_admin=Admin.query.filter_by(name=session["admin"]).first()
     adminOplog=Oplog(
         reason='删除post',
@@ -113,7 +113,7 @@ def delete_post(id):
         admin=current_admin)
     comments=post.comments
     for comment in comments:
-        comment = Comment.query.filter_by(id=comment.id).first()
+        comment = Comment.query.filter_by(post_id=comment.id).first()
         db.session.delete(comment)
     db.session.add(adminOplog)
     db.session.delete(post)    
@@ -130,10 +130,10 @@ def comment_list():
     return render_template('admin/comment_list.html',
         comments=comments,pagination=pagination)
 
-@admin.route("/delete_comment/<int:id>",methods=['GET','POST'])
+@admin.route("/delete_comment/<int:comment_id>",methods=['GET','POST'])
 @admin_login_req
-def delete_comment(id):
-    comment=Comment.query.get_or_404(id)
+def delete_comment(comment_id):
+    comment=Comment.query.get_or_404(comment_id)
     current_admin=Admin.query.filter_by(name=session["admin"]).first()
     adminOplog=Oplog(
         reason='删除评论',
@@ -196,10 +196,10 @@ def oplog_list():
     return render_template('admin/oplog_list.html',
         oplogs=oplogs,pagination=pagination,admin=admin)
 
-@admin.route("/delete_oplog/<int:id>",methods=['GET','POST'])
+@admin.route("/delete_oplog/<int:oplog_id>",methods=['GET','POST'])
 @admin_login_req
-def delete_oplog(id):
-    oplog=Oplog.query.get_or_404(id)
+def delete_oplog(oplog_id):
+    oplog=Oplog.query.get_or_404(oplog_id)
     admin=Admin.query.filter_by(name=session['admin']).first()
     if admin.role.name=='超级管理员':
         adminOplog=Oplog(
@@ -224,10 +224,10 @@ def adminlog_list():
     return render_template('admin/adminlog_list.html',
         adminlogs=adminlogs,pagination=pagination,admin=admin)
 
-@admin.route("/delete_adminlog/<int:id>",methods=['GET','POST'])
+@admin.route("/delete_adminlog/<int:adminlog_id>",methods=['GET','POST'])
 @admin_login_req
-def delete_adminlog(id):
-    adminlog=Adminlog.query.get_or_404(id)
+def delete_adminlog(adminlog_id):
+    adminlog=Adminlog.query.get_or_404(adminlog_id)
     admin=Admin.query.filter_by(name=session['admin']).first()
     if admin.role.name=='超级管理员':
         adminOplog=Oplog(
@@ -277,10 +277,10 @@ def role_list():
     return render_template('admin/role_list.html',
         roles=roles,current_admin=current_admin,pagination=pagination)
 
-@admin.route("/delete_role/<int:id>",methods=['GET','POST'])
+@admin.route("/delete_role/<int:role_id>",methods=['GET','POST'])
 @admin_login_req
-def delete_role(id):
-    role=Role.query.get_or_404(id)
+def delete_role(role_id):
+    role=Role.query.get_or_404(role_id)
     current_admin=Admin.query.filter_by(name=session["admin"]).first()
     if current_admin.role.name=='超级管理员':
         adminOplog=Oplog(
@@ -338,10 +338,10 @@ def admin_list():
     return render_template('admin/admin_list.html',
         admins=admins,current_admin=current_admin,pagination=pagination)
 
-@admin.route("/delete_admin/<int:id>",methods=['GET','POST'])
+@admin.route("/delete_admin/<int:admin_id>",methods=['GET','POST'])
 @admin_login_req
-def delete_admin(id):
-    admin=Admin.query.get_or_404(id)
+def delete_admin(admin_id):
+    admin=Admin.query.get_or_404(admin_id)
     current_admin=Admin.query.filter_by(name=session["admin"]).first()
     adminOplog=Oplog(
         reason='删除管理员',

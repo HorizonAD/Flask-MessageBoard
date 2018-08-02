@@ -115,9 +115,9 @@ def comments():
     url_root=request.url_root.rstrip('/')
     return render_template('comment.html',path=path,url_root=url_root,comments=comments,pagination=pagination)    
 
-@main.route('/post/<int:id>', methods=['GET', 'POST'])
-def post(id):
-    post = Post.query.get_or_404(id)
+@main.route('/post/<int:post_id>', methods=['GET', 'POST'])
+def post(post_id):
+    post = Post.query.get_or_404(post_id)
     if not current_user._get_current_object():
         abort(403)
     elif current_user.is_anonymous:
@@ -175,10 +175,10 @@ def post(id):
     return render_template('post.html', posts=[post], form=form,
                            comments=comments,id=post.id, pagination=pagination)
 
-@main.route('/edit/<int:id>', methods=['GET', 'POST'])
+@main.route('/edit/<int:post_id>', methods=['GET', 'POST'])
 @login_required
-def edit(id):
-    post = Post.query.get_or_404(id)
+def edit(post_id):
+    post = Post.query.get_or_404(post_id)
     if current_user != post.author and \
             not current_user._get_current_object():
         abort(403)
@@ -191,10 +191,10 @@ def edit(id):
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
 
-@main.route('/delete_comment/<int:id>', methods=['GET', 'POST'])
+@main.route('/delete_comment/<int:comment_id>', methods=['GET', 'POST'])
 @login_required
-def delete_comment(id):
-    comment = Comment.query.get_or_404(id)
+def delete_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
     if current_user != comment.author and \
             not current_user._get_current_object():
         abort(403)
@@ -204,10 +204,10 @@ def delete_comment(id):
         flash('评论已删除')
         return redirect(url_for('.post',id=post_id))
 
-@main.route('/delete_post/<int:id>', methods=['GET', 'POST'])
+@main.route('/delete_post/<int:post_id>', methods=['GET', 'POST'])
 @login_required
-def delete_post(id):
-    post = Post.query.get_or_404(id)
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
     if current_user != post.author and \
             not current_user._get_current_object():
         abort(403)
