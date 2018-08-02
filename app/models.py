@@ -1,17 +1,18 @@
-#coding=utf-8
+# coding=utf-8
 from datetime import datetime
 import bleach
 from markdown import markdown
-from flask_login import UserMixin,AnonymousUserMixin
+from flask_login import UserMixin, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from .exceptions import db,login_manager,admin_login_manager
+from .exceptions import db, login_manager, admin_login_manager
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
-    avatar = db.Column(db.String(128),default=None)
+    avatar = db.Column(db.String(128), default=None)
     location = db.Column(db.String(64))
     about_me = db.Column(db.Text())
     addtime = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -22,21 +23,21 @@ class User(db.Model, UserMixin):
     def generate_fake(count=100):
         from sqlalchemy.exc import IntegrityError
         from random import seed
-        import forgery_py  #生成虚拟数据所需要的库
+        import forgery_py  # 生成虚拟数据所需要的库
 
         seed()
         for i in range(count):
             u = User(username=forgery_py.internet.user_name(True),
-                    location=forgery_py.address.city(),
-                    about_me=forgery_py.lorem_ipsum.sentence(),
-                    password=forgery_py.lorem_ipsum.word())
+                     location=forgery_py.address.city(),
+                     about_me=forgery_py.lorem_ipsum.sentence(),
+                     password=forgery_py.lorem_ipsum.word())
             db.session.add(u)
             try:
                 db.session.commit()
             except IntegrityError:
                 db.session.rollback()
-                
-    #设置该属性不可读
+
+    # 设置该属性不可读
     @property
     def password(self):
         raise AttributeError('password不可读')
@@ -51,15 +52,19 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<User %r>' % self.username
 
+
 class AnonymousUser(AnonymousUserMixin):
     def __init__(self):
         self.username = '游客'
 
+
 login_manager.anonymous_user = AnonymousUser
+
 
 @login_manager.user_loader
 def load_user(userid):
-    return User.query.get(int(userid))  
+    return User.query.get(int(userid))
+
 
 class Post(db.Model):
     __tablename__ = 'posts'
@@ -85,7 +90,7 @@ class Post(db.Model):
             db.session.add(p)
             db.session.commit()
 
-    #处理富文本，将Markdown格式转换为Html
+    # 处理富文本，将Markdown格式转换为Html
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
@@ -98,19 +103,21 @@ class Post(db.Model):
 
 db.event.listen(Post.body, 'set', Post.on_changed_body)
 
+
 class Follow(db.Model):
     __tablename__ = 'follows'
     follower_id = db.Column(db.Integer, db.ForeignKey('comments.id'),
-                           primary_key=True)
+                            primary_key=True)
     followed_id = db.Column(db.Integer, db.ForeignKey('comments.id'),
-                         primary_key=True)
+                            primary_key=True)
+
 
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
-    anonymoususer=db.Column(db.String(64))
+    anonymoususer = db.Column(db.String(64))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
@@ -122,10 +129,11 @@ class Comment(db.Model):
                                lazy='dynamic',
                                cascade='all, delete-orphan')
     followers = db.relationship('Follow',
-                               foreign_keys=[Follow.followed_id],
-                               backref=db.backref('followed', lazy='joined'),
-                               lazy='dynamic',
-                               cascade='all, delete-orphan')
+                                foreign_keys=[Follow.followed_id],
+                                backref=db.backref('followed', lazy='joined'),
+                                lazy='dynamic',
+                                cascade='all, delete-orphan')
+
     @staticmethod
     def generate_fake(count=100):
         from random import seed, randint
@@ -153,8 +161,9 @@ class Comment(db.Model):
         seed()
         comment_count = Comment.query.count()
         for i in range(count):
-            followed = Comment.query.offset(randint(0, comment_count - 1)).first()
-            if followed.comment_type=='reply':
+            followed = Comment.query.offset(
+                randint(0, comment_count - 1)).first()
+            if followed.comment_type == 'reply':
                 continue
             c = Comment(body=forgery_py.lorem_ipsum.sentences(randint(3, 5)),
                         anonymoususer=forgery_py.internet.user_name(True),
@@ -181,11 +190,12 @@ class Comment(db.Model):
             return False
         else:
             return True
-    # to confirm whether the comment is a reply or not 
+    # to confirm whether the comment is a reply or not
 
     def followed_name(self):
         if self.is_reply():
-            return self.followed.first().followed.author         
+            return self.followed.first().followed.author
+
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
@@ -201,7 +211,8 @@ class Role(db.Model):
     def __repr__(self):
         return "<Role %r>" % self.name
 
-class Admin(db.Model,UserMixin):
+
+class Admin(db.Model, UserMixin):
     __tablename__ = 'admin'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -212,7 +223,7 @@ class Admin(db.Model,UserMixin):
     adminlogs = db.relationship('Adminlog', backref='admin')
     oplogs = db.relationship('Oplog', backref='admin')
 
-    #设置该属性不可读
+    # 设置该属性不可读
     @property
     def password(self):
         raise AttributeError('password不可读')
@@ -227,9 +238,11 @@ class Admin(db.Model,UserMixin):
     def __repr__(self):
         return "<Admin %r>" % self.name
 
+
 @admin_login_manager.user_loader
 def load_admin(adminid):
-    return Admin.query.get(int(adminid))        
+    return Admin.query.get(int(adminid))
+
 
 class Adminlog(db.Model):
     __tablename__ = 'adminlog'
