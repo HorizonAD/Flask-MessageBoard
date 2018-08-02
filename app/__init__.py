@@ -2,7 +2,7 @@
 import os.path as op
 from flask import Flask
 from config import config
-from .admin import UserModelView,PostModelView,CommentModelView,FileAdmin
+from .admin import UserModelView,PostModelView,CommentModelView,FileOfAdmin
 from flask_admin import AdminIndexView
 from .exceptions import (
     bootstrap,
@@ -43,7 +43,7 @@ def create_app(config_name):
     admin.add_view(CommentModelView(db.session,name='评论管理'))
     #文件管理    
     path = op.join(op.dirname(__file__), 'upload/avatar')
-    admin.add_view(FileAdmin(path, '/upload', name='文件管理'))    
+    admin.add_view(FileOfAdmin(path, '/upload', name='文件管理'))    
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

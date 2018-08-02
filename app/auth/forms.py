@@ -21,8 +21,7 @@ class RegistrationForm(FlaskForm):
     about_me = TextAreaField('关于我(选填)')
     submit = SubmitField('注册')
 
-    @staticmethod
-    def validate_username(field):
+    def validate_username(self,field):
         if User.query.filter_by(username=field.data).first():
             raise ValidationError('用户名已被注册')
 

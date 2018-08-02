@@ -5,7 +5,7 @@ from flask_admin.contrib.fileadmin import FileAdmin
 from flask_wtf import Form
 from .models import User,Post,Comment
 
-class FileAdmin(FileAdmin):
+class FileOfAdmin(FileAdmin):
     @staticmethod
     def is_accessible():
         if current_user.is_authenticated and current_user.username == "八一":

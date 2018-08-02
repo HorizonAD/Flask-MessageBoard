@@ -34,8 +34,7 @@ class LoginForm(FlaskForm):
         }
     )
 
-    @staticmethod
-    def validate_account(field):
+    def validate_account(self,field):
         account = field.data
         admin = Admin.query.filter_by(name=account).count()
         if admin == 0:
