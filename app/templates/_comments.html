@@ -41,13 +41,13 @@
             <div class="post-footer">
             {% if comment.author %}
                 {% if current_user == comment.author %}
-                    <a href="{{ url_for('.delete_comment', id=comment.id) }}">
+                    <a href="{{ url_for('.delete_comment', comment_id=comment.id) }}">
                         <button class="btn btn-sm btn-info">删除</button>
                     </a>
                 {% endif %}
             {% endif %}
             {% if path=="/comment" or "/user" in path or "/search" in path %}
-            <button class="btn btn-sm btn-info" onclick="return_post('{{ url_root }}{{ url_for('.post', id=comment.post.id) }}')">去回复</button>
+            <button class="btn btn-sm btn-info" onclick="return_post('{{ url_root }}{{ url_for('.post', post_id=comment.post.id) }}')">去回复</button>
             {% elif comment.author.username %}
             <button class="btn btn-sm btn-info" onclick="go_to_reply({{ comment.id }},'{{ comment.author.username }}')">回复</button>
             {% else %}

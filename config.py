@@ -27,6 +27,7 @@ class Config:
     MAIL_PROT = 25
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
+    # ennn..我知道密码上传了,这个邮箱测试用
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or "flywinky@163.com"
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or "lclxzhavyznfc163"
     MAIL_DEBUG = True

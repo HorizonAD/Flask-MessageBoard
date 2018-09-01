@@ -149,7 +149,7 @@ def post(post_id):
             send_email('328588917@qq.com', '新评论',
                        'auth/email/notice')
             flash('评论已发布')
-            return redirect(url_for('.post', id=post.id, page=-1))
+            return redirect(url_for('.post', post_id=post.id, page=-1))
     else:
         form = CommentForm()
         if form.validate_on_submit():
@@ -171,7 +171,7 @@ def post(post_id):
             send_email('328588917@qq.com', '新评论',
                        'auth/email/notice')
             flash('评论已发布')
-            return redirect(url_for('.post', id=post.id, page=-1))
+            return redirect(url_for('.post', post_id=post.id, page=-1))
     page = request.args.get('page', 1, type=int)
     if page == -1:
         page = (post.comments.count() - 1) // \
@@ -196,7 +196,7 @@ def edit(post_id):
         post.body = form.body.data
         db.session.add(post)
         flash('槽点已更新')
-        return redirect(url_for('.post', id=post.id))
+        return redirect(url_for('.post', post_id=post.id))
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
 
@@ -212,7 +212,7 @@ def delete_comment(comment_id):
         post_id = comment.post.id
         db.session.delete(comment)
         flash('评论已删除')
-        return redirect(url_for('.post', id=post_id))
+        return redirect(url_for('.post', post_id=post_id))
 
 
 @main.route('/delete_post/<int:post_id>', methods=['GET', 'POST'])

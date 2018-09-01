@@ -33,7 +33,7 @@
                                 <td>{{ adminlog.ip }}</td>
                                 {% if admin.role.name=='超级管理员' %}
                                 <td>
-                                    <a href="{{ url_for('Admin.delete_adminlog', id=adminlog.id) }}" class="label label-danger">删除</a>
+                                    <a href="{{ url_for('Admin.delete_adminlog', adminlog_id=adminlog.id) }}" class="label label-danger">删除</a>
                                 </td>
                                 {% endif %}
                             </tr>

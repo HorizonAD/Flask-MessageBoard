@@ -39,7 +39,7 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated and current_user.username=='八一' %}
-                    <li><a href="http://127.0.0.1:5000/6oPT">后台管理</a></li>
+                    <li><a href="/6oPT">后台管理</a></li>
                 {% else %}
                     <li><a href="{{ url_for('auth.login') }}">后台管理</a></li>    
                 {% endif %}    

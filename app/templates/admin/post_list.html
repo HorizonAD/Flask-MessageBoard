@@ -34,7 +34,7 @@
                                         </span>
                                     </span>
                                     {{ post.body }}
-                                    <br><a href="{{ url_for('Admin.delete_post', id=post.id) }}" class="label label-danger pull-right">
+                                    <br><a href="{{ url_for('Admin.delete_post', post_id=post.id) }}" class="label label-danger pull-right">
                                     删除</a>
                                 </div>
                             </div>

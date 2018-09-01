@@ -43,7 +43,7 @@
                                 <td>{{ user.about_me }}</td>
                                 <td>{{ moment(user.addtime).format('YYYY-M-D h:mm:ss a') }}</td>
                                 <td>
-                                    <a href="{{ url_for('Admin.delete_user', id=user.id) }}" class="label label-danger">删除</a>
+                                    <a href="{{ url_for('Admin.delete_user', user_id=user.id) }}" class="label label-danger">删除</a>
                                 </td>
                             </tr>
                             {% endfor %}
